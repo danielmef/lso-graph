@@ -645,19 +645,20 @@ hub-buy,hub-sell`;
     .each(function(d) {
       const grp = d3.select(this);
       const r   = radius(d);
-      const bx  = r * 0.72, by = -r * 0.72;
-      const bw  = 78, bh = 42;
-      // Badge background
+      // Bottom-left corner of badge sits on the circle edge (top-right area)
+      const blx = r * 0.62, bly = -r * 0.62;
+      const bw  = 50, bh = 28;
+      // Badge background — positioned so bottom-left overlaps circle
       grp.append("rect")
-        .attr("x", bx - bw / 2).attr("y", by - bh / 2)
+        .attr("x", blx).attr("y", bly - bh)
         .attr("width", bw).attr("height", bh)
-        .attr("rx", 6).attr("ry", 6)
+        .attr("rx", 4).attr("ry", 4)
         .attr("fill", "#1a1a2e")
         .attr("stroke", col(d).light)
         .attr("stroke-width", 2);
-      // Badge label
+      // Badge label — centred within the rect
       grp.append("text")
-        .attr("x", bx).attr("y", by)
+        .attr("x", blx + bw / 2).attr("y", bly - bh / 2)
         .attr("text-anchor", "middle")
         .attr("dominant-baseline", "central")
         .attr("fill", col(d).light)
