@@ -640,6 +640,35 @@ hub-buy,hub-sell`;
     });
   })();
 
+  // GLF badge on company nodes where glf === "yes"
+  nodeSel.filter(d => d.type === "company" && d.glf && d.glf.toLowerCase() === "yes")
+    .each(function(d) {
+      const grp = d3.select(this);
+      const r   = radius(d);
+      const bx  = r * 0.72, by = -r * 0.72;
+      const bw  = 26, bh = 14;
+      // Badge background
+      grp.append("rect")
+        .attr("x", bx - bw / 2).attr("y", by - bh / 2)
+        .attr("width", bw).attr("height", bh)
+        .attr("rx", 3).attr("ry", 3)
+        .attr("fill", "#1a1a2e")
+        .attr("stroke", col(d).light)
+        .attr("stroke-width", 1);
+      // Badge label
+      grp.append("text")
+        .attr("x", bx).attr("y", by)
+        .attr("text-anchor", "middle")
+        .attr("dominant-baseline", "central")
+        .attr("fill", col(d).light)
+        .attr("font-size", "8px")
+        .attr("font-weight", 700)
+        .attr("font-family", "'Barlow Condensed', sans-serif")
+        .attr("letter-spacing", "0.8px")
+        .attr("pointer-events", "none")
+        .text("GLF");
+    });
+
   // Staggered fade-in
   nodeSel.transition().duration(600)
     .delay((d, i) => 350 + i * 45)
