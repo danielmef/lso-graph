@@ -130,6 +130,33 @@
       opacity: 0; pointer-events: none;
     }
 
+    /* API Dropdown */
+    #api-dropdown-wrap {
+      position: fixed; top: 22px; left: 50%; transform: translateX(-50%);
+      z-index: 10;
+      opacity: 0; animation: slideDown .7s ease .6s forwards;
+    }
+    #api-select {
+      background: rgba(10,18,40,0.85);
+      border: 1px solid rgba(255,255,255,0.18);
+      border-radius: 6px;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      padding: 6px 32px 6px 12px;
+      cursor: pointer;
+      outline: none;
+      backdrop-filter: blur(8px);
+      appearance: none;
+      -webkit-appearance: none;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.5)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 10px center;
+      min-width: 280px;
+    }
+    #api-select:hover { border-color: rgba(255,255,255,0.35); }
+    #api-select option { background: #070F28; color: var(--text); }
+
     /* Graph */
     #graph {
       position: fixed; inset: 0;
@@ -176,6 +203,9 @@
   <div id="logo">
     <img src="https://www.mplify.net/wp-content/themes/base/images/logo.svg" alt="Mplify Alliance" />
   </div>
+  <div id="api-dropdown-wrap">
+    <select id="api-select"><option>Loading APIs…</option></select>
+  </div>
   <div id="debug-bar"></div>
   <svg id="graph"></svg>
   <div id="tooltip">
@@ -198,9 +228,39 @@
   const BASE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBpMitJ2sH9Y6IIIrm8kd67ndx8E6gHXaM6c5SPvlzI7FE2baDQbYl692ucuTu6vkMHkjAZztKfWv3/pub?single=true&output=csv";
   const DEFAULT_NODES_GID = "1365793813";
   const DEFAULT_LINKS_GID = "1881293424";
+  const CONFIG_URL = BASE_URL + "&gid=399938948";
+
+  // Fetch config tab and populate dropdown
+  const apiSelect = document.getElementById("api-select");
+  let apiConfig = [];
+  try {
+    const configResp = await fetch(CONFIG_URL + "&t=" + Date.now());
+    if (!configResp.ok) throw new Error("HTTP " + configResp.status);
+    const configCsv = await configResp.text();
+    apiConfig = d3.csvParse(configCsv).filter(r => r.label && r.nodes_gid && r.links_gid);
+    apiSelect.innerHTML = apiConfig.map(r =>
+      `<option value="${r.nodes_gid}|${r.links_gid}">${r.label}</option>`
+    ).join("");
+  } catch(e) {
+    console.warn("Could not fetch API config:", e);
+    apiSelect.innerHTML = `<option value="${DEFAULT_NODES_GID}|${DEFAULT_LINKS_GID}">LSO Address Validation (lso.av.2)</option>`;
+  }
+
+  // Switch infographic when dropdown changes
+  apiSelect.addEventListener("change", () => {
+    const [ng, lg] = apiSelect.value.split("|");
+    const url = new URL(window.location.href);
+    url.searchParams.set("nodes", ng);
+    url.searchParams.set("links", lg);
+    window.location.href = url.toString();
+  });
+
+  // Set dropdown to current selection based on URL params
   const params     = new URLSearchParams(window.location.search);
   const nodesGid   = params.get("nodes") || DEFAULT_NODES_GID;
   const linksGid   = params.get("links") || DEFAULT_LINKS_GID;
+  const matchOpt   = [...apiSelect.options].find(o => o.value === `${nodesGid}|${linksGid}`);
+  if (matchOpt) matchOpt.selected = true;
   const NODES_URL  = BASE_URL + "&gid=" + nodesGid;
   const LINKS_URL  = BASE_URL + "&gid=" + linksGid;
 
