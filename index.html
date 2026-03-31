@@ -122,6 +122,130 @@
       opacity: 0; animation: slideUp .7s ease 1s forwards;
     }
 
+    /* Implementation Form */
+    #impl-btn {
+      position: fixed; bottom: 28px; left: 50%; transform: translateX(-50%);
+      z-index: 10;
+      background: linear-gradient(135deg, #3D7BC7, #2a5da0);
+      color: #fff;
+      border: none; border-radius: 20px;
+      padding: 9px 22px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px; font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(61,123,199,0.4);
+      transition: transform .15s, box-shadow .15s;
+      opacity: 0; animation: slideUp .7s ease 1.1s forwards;
+      white-space: nowrap;
+    }
+    #impl-btn:hover {
+      transform: translateX(-50%) scale(1.04);
+      box-shadow: 0 6px 24px rgba(61,123,199,0.6);
+    }
+    /* Drawer overlay */
+    #impl-overlay {
+      display: none; position: fixed; inset: 0;
+      background: rgba(0,0,0,0.6);
+      z-index: 50; backdrop-filter: blur(3px);
+    }
+    #impl-overlay.active { display: block; }
+    /* Drawer panel */
+    #impl-drawer {
+      position: fixed; top: 0; right: -540px; width: 520px; height: 100%;
+      background: #070F28;
+      border-left: 1px solid rgba(255,255,255,0.1);
+      z-index: 51; overflow-y: auto;
+      transition: right .3s ease;
+      padding: 28px 28px 40px;
+    }
+    #impl-drawer.active { right: 0; }
+    #impl-drawer h2 {
+      font-family: 'Barlow Condensed', sans-serif;
+      font-size: 20px; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+      color: #fff; margin-bottom: 4px;
+    }
+    #impl-drawer .drawer-sub {
+      font-size: 12px; color: var(--muted); margin-bottom: 20px;
+    }
+    #impl-drawer .close-btn {
+      position: absolute; top: 20px; right: 22px;
+      font-size: 26px; color: var(--muted);
+      cursor: pointer; line-height: 1;
+      transition: color .15s;
+    }
+    #impl-drawer .close-btn:hover { color: #fff; }
+    /* Form fields */
+    .impl-field { margin-bottom: 14px; }
+    .impl-field label {
+      display: block; font-size: 12px;
+      color: var(--muted); margin-bottom: 5px; letter-spacing: .3px;
+    }
+    .impl-field input, .impl-field textarea {
+      width: 100%;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid rgba(255,255,255,0.12);
+      border-radius: 6px;
+      color: #fff; font-family: 'DM Sans', sans-serif;
+      font-size: 13px; padding: 8px 12px;
+      outline: none; transition: border-color .15s;
+    }
+    .impl-field input:focus, .impl-field textarea:focus {
+      border-color: #3D7BC7;
+    }
+    /* API table */
+    #impl-table-wrap {
+      margin: 16px 0;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 6px; overflow: hidden;
+    }
+    #impl-table-wrap p {
+      font-size: 12px; color: var(--muted);
+      margin-bottom: 10px;
+    }
+    .impl-table {
+      width: 100%; border-collapse: collapse;
+      font-size: 11px;
+    }
+    .impl-table th {
+      background: rgba(255,255,255,0.06);
+      color: var(--muted); padding: 6px 8px;
+      text-align: left; font-weight: 500;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      white-space: nowrap;
+    }
+    .impl-table td {
+      padding: 5px 8px;
+      border-bottom: 1px solid rgba(255,255,255,0.05);
+      vertical-align: middle; color: var(--text);
+    }
+    .impl-table tr:last-child td { border-bottom: none; }
+    .impl-table tr:hover td { background: rgba(255,255,255,0.03); }
+    .impl-table .api-name { font-weight: 500; min-width: 160px; }
+    .impl-table .ver-cell { text-align: center; }
+    .impl-table input[type=checkbox] {
+      width: 14px; height: 14px; cursor: pointer;
+      accent-color: #3D7BC7;
+    }
+    /* Submit */
+    #impl-submit {
+      width: 100%; padding: 11px;
+      background: linear-gradient(135deg, #3D7BC7, #2a5da0);
+      color: #fff; border: none; border-radius: 6px;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px; font-weight: 600;
+      cursor: pointer; margin-top: 8px;
+      transition: opacity .15s;
+    }
+    #impl-submit:hover { opacity: .88; }
+    #impl-submit:disabled { opacity: .5; cursor: not-allowed; }
+    #impl-msg {
+      margin-top: 12px; font-size: 13px;
+      text-align: center; min-height: 20px;
+    }
+    #impl-msg.success { color: #81C784; }
+    #impl-msg.error   { color: #EF9A9A; }
+
     /* Debug bar */
     #debug-bar {
       position: fixed; bottom: 6px; left: 50%; transform: translateX(-50%);
@@ -254,6 +378,50 @@
     <span id="lightbox-close">&times;</span>
     <img src="https://danielmef.github.io/lso-graph/LSO_Versions_and_Releases.png" alt="LSO Versions and Releases" />
   </div>
+  <!-- Implementation Survey Button -->
+  <button id="impl-btn">&#10010; Submit My Implementation</button>
+
+  <!-- Drawer Overlay -->
+  <div id="impl-overlay"></div>
+
+  <!-- Drawer Panel -->
+  <div id="impl-drawer">
+    <span class="close-btn" id="impl-close">&times;</span>
+    <h2>Implementation Registry</h2>
+    <p class="drawer-sub">Tell us which LSO APIs and versions your company has implemented.</p>
+
+    <div class="impl-field">
+      <label>Company Name *</label>
+      <input type="text" id="impl-company" placeholder="e.g. Acme Telecom" />
+    </div>
+    <div class="impl-field">
+      <label>Contact Email *</label>
+      <input type="email" id="impl-email" placeholder="you@company.com" />
+    </div>
+
+    <div id="impl-table-wrap">
+      <table class="impl-table" id="impl-table">
+        <thead>
+          <tr>
+            <th class="api-name">LSO API</th>
+            <th>Version</th>
+            <th style="text-align:center">Buy Side</th>
+            <th style="text-align:center">Sell Side</th>
+          </tr>
+        </thead>
+        <tbody id="impl-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="impl-field">
+      <label>Comments (optional)</label>
+      <textarea id="impl-comments" rows="3" placeholder="Any additional notes…"></textarea>
+    </div>
+
+    <button id="impl-submit">Submit</button>
+    <div id="impl-msg"></div>
+  </div>
+
   <div id="debug-bar"></div>
   <svg id="graph"></svg>
   <div id="tooltip">
@@ -936,6 +1104,96 @@ hub-buy,hub-sell`;
     const b = parseInt(hex.slice(5,7),16);
     return `rgba(${r},${g},${b},${a})`;
   }
+
+  // ── Implementation Survey ────────────────────────────────────────────────
+  (function() {
+    // REPLACE THIS with your deployed Google Apps Script Web App URL
+    const APPS_SCRIPT_URL = "YOUR_APPS_SCRIPT_URL_HERE";
+
+    // LSO API list with versions (from LSO Versions & Releases table)
+    const apis = [
+      { name: "Geographic Address",            versions: ["6.0.0-RC","7.0.0-RC","7.0.1"] },
+      { name: "Geographic Site",               versions: ["6.0.0-RC","7.0.0-RC","7.0.1"] },
+      { name: "Product Catalog",               versions: ["1.0.0-RC","2.0.0-RC","3.0.0-RC","4.0.1"] },
+      { name: "Product Offering Qualification",versions: ["6.0.0-RC","7.0.0-RC","7.0.1","8.0.0-RC","8.0.0"] },
+      { name: "Quote",                         versions: ["6.0.0-RC","7.0.0-RC","8.0.0","8.0.1","9.0.0-RC","10.0.0"] },
+      { name: "Product Offering Availability", versions: ["1.0.0-RC","2.0.0-RC","3.0.0-RC","4.0.0-RC","4.0.0"] },
+      { name: "Pricing Discovery",             versions: ["1.0.0-RC","2.0.0-RC","3.0.0-RC","4.0.0-RC","4.0.0"] },
+      { name: "Product Order",                 versions: ["6.0.0-RC","7.0.0-RC","8.0.0-RC","9.0.0-RC","10.0.0","11.0.0-RC","11.0.1"] },
+      { name: "Product Inventory",             versions: ["6.0.0-RC","7.0.0-RC","7.0.1","7.0.2","8.0.0-RC","8.0.0"] },
+      { name: "Trouble Ticket",                versions: ["1.0.0-RC","2.0.0-RC","3.0.0-RC","4.0.0","5.0.0-RC","5.0.0"] },
+      { name: "Appointment",                   versions: ["1.0.0-RC","2.0.0","3.0.0-RC","3.0.1"] },
+      { name: "Work Order",                    versions: ["1.0.0-RC","2.0.0","3.0.0-RC","3.0.0"] },
+      { name: "Billing",                       versions: ["1.0.0-RC","2.0.0","3.0.0-RC","3.0.1"] },
+      { name: "Circuit Impairment & Maintenance", versions: ["1.0.0-RC","1.0.0"] },
+    ];
+
+    // Build table rows
+    const tbody = document.getElementById("impl-tbody");
+    apis.forEach(api => {
+      api.versions.forEach((ver, i) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="api-name">${i === 0 ? api.name : ""}</td>
+          <td>${ver}</td>
+          <td class="ver-cell"><input type="checkbox" data-api="${api.name}" data-ver="${ver}" data-side="buy" /></td>
+          <td class="ver-cell"><input type="checkbox" data-api="${api.name}" data-ver="${ver}" data-side="sell" /></td>`;
+        tbody.appendChild(tr);
+      });
+    });
+
+    // Drawer open/close
+    const drawer  = document.getElementById("impl-drawer");
+    const overlay = document.getElementById("impl-overlay");
+    const btn     = document.getElementById("impl-btn");
+    const closeBtn= document.getElementById("impl-close");
+
+    function openDrawer()  { drawer.classList.add("active");  overlay.classList.add("active"); }
+    function closeDrawer() { drawer.classList.remove("active"); overlay.classList.remove("active"); }
+
+    btn.addEventListener("click", openDrawer);
+    closeBtn.addEventListener("click", closeDrawer);
+    overlay.addEventListener("click", closeDrawer);
+    document.addEventListener("keydown", e => { if (e.key === "Escape") closeDrawer(); });
+
+    // Form submission
+    document.getElementById("impl-submit").addEventListener("click", async () => {
+      const company  = document.getElementById("impl-company").value.trim();
+      const email    = document.getElementById("impl-email").value.trim();
+      const comments = document.getElementById("impl-comments").value.trim();
+      const msgEl    = document.getElementById("impl-msg");
+      const submitBtn= document.getElementById("impl-submit");
+
+      if (!company) { msgEl.className = "error"; msgEl.textContent = "Please enter your company name."; return; }
+      if (!email)   { msgEl.className = "error"; msgEl.textContent = "Please enter your contact email."; return; }
+
+      // Collect checked items
+      const selections = [];
+      document.querySelectorAll("#impl-tbody input[type=checkbox]:checked").forEach(cb => {
+        selections.push({ api: cb.dataset.api, version: cb.dataset.ver, side: cb.dataset.side });
+      });
+      if (!selections.length) { msgEl.className = "error"; msgEl.textContent = "Please select at least one API version."; return; }
+
+      submitBtn.disabled = true;
+      msgEl.className = ""; msgEl.textContent = "Submitting…";
+
+      try {
+        await fetch(APPS_SCRIPT_URL, {
+          method: "POST",
+          mode: "no-cors",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ company, email, comments, selections, timestamp: new Date().toISOString() })
+        });
+        msgEl.className = "success";
+        msgEl.textContent = "Thank you! Your implementation has been recorded.";
+        submitBtn.disabled = false;
+      } catch(e) {
+        msgEl.className = "error";
+        msgEl.textContent = "Submission failed. Please try again.";
+        submitBtn.disabled = false;
+      }
+    });
+  })();
 
   // Lightbox behaviour
   (function() {
