@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Mplify LSO API Partners - Simplified</title>
+  <title>Mplify LSO API Partners</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
   <script src="https://d3js.org/d3.v7.min.js"></script>
@@ -151,7 +151,7 @@
     #impl-overlay.active { display: block; }
     /* Drawer panel */
     #impl-drawer {
-      position: fixed; top: 0; right: -790px; width: 770px; height: 100%;
+      position: fixed; top: 0; right: -540px; width: 520px; height: 100%;
       background: #070F28;
       border-left: 1px solid rgba(255,255,255,0.1);
       z-index: 51; overflow-y: auto;
@@ -245,64 +245,6 @@
     }
     #impl-msg.success { color: #81C784; }
     #impl-msg.error   { color: #EF9A9A; }
-
-    /* Loading overlay */
-    #loading-overlay {
-      position: fixed; inset: 0;
-      background: var(--bg);
-      z-index: 200;
-      display: flex; flex-direction: column;
-      justify-content: center; align-items: center;
-      gap: 16px;
-      transition: opacity .6s ease;
-    }
-    #loading-overlay.hidden {
-      opacity: 0;
-      pointer-events: none;
-    }
-    #loading-text {
-      font-family: 'Barlow Condensed', sans-serif;
-      font-size: 22px; font-weight: 600;
-      letter-spacing: 1px;
-      color: var(--accent);
-      text-transform: uppercase;
-    }
-    #loading-dots span {
-      display: inline-block;
-      width: 8px; height: 8px;
-      border-radius: 50%;
-      background: var(--accent);
-      margin: 0 3px;
-      animation: dotPulse 1.2s ease-in-out infinite;
-    }
-    #loading-dots span:nth-child(2) { animation-delay: .2s; }
-    #loading-dots span:nth-child(3) { animation-delay: .4s; }
-    @keyframes dotPulse {
-      0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
-      40%           { transform: scale(1);   opacity: 1;   }
-    }
-
-    /* Info box */
-    #info-box {
-      position: fixed; top: 50%; left: 20px;
-      transform: translateY(-50%);
-      width: 200px;
-      background: rgba(255,255,255,0.92);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      padding: 16px;
-      font-size: 12px;
-      line-height: 1.6;
-      color: var(--text);
-      z-index: 10;
-      box-shadow: 0 2px 12px rgba(61,123,199,0.1);
-      opacity: 0; animation: slideUp .7s ease 1.2s forwards;
-    }
-    #info-box a {
-      color: var(--accent);
-      text-decoration: none;
-    }
-    #info-box a:hover { text-decoration: underline; }
 
     /* Debug bar */
     #debug-bar {
@@ -414,14 +356,6 @@
 </head>
 <body>
 
-  <!-- Loading overlay -->
-  <div id="loading-overlay">
-    <div id="loading-text">Infographic is being rendered now</div>
-    <div id="loading-dots">
-      <span></span><span></span><span></span>
-    </div>
-  </div>
-
   <div id="header">
     <div id="title" style="visibility:hidden">Interoperable LSO Partners - Illustration</div>
     <div id="subtitle" style="visibility:hidden">LSO Address Validation API release 2 (lso.av.2)</div>
@@ -435,17 +369,17 @@
     <img src="https://www.mplify.net/wp-content/themes/base/images/logo.svg" alt="Mplify Alliance" />
   </div>
   <div id="api-dropdown-wrap">
-    <img id="lso-versions-img" src="https://danielmef.github.io/lso-api-reduced-graph/LSO_Versions_and_Releases.png"
+    <img id="lso-versions-img" src="https://danielmef.github.io/lso-api-graph/LSO_Versions_and_Releases.png"
          alt="LSO Versions and Releases" title="LSO Versions and Releases" />
     <select id="api-select"><option>Loading APIs…</option></select>
   </div>
   <!-- Lightbox -->
   <div id="lightbox">
     <span id="lightbox-close">&times;</span>
-    <img src="https://danielmef.github.io/lso-api-reduced-graph/LSO_Versions_and_Releases.png" alt="LSO Versions and Releases" />
+    <img src="https://danielmef.github.io/lso-api-graph/LSO_Versions_and_Releases.png" alt="LSO Versions and Releases" />
   </div>
   <!-- Implementation Survey Button -->
-  <button id="impl-btn">&#10010; Share my API status</button>
+  <button id="impl-btn">&#10010; Submit My Implementation</button>
 
   <!-- Drawer Overlay -->
   <div id="impl-overlay"></div>
@@ -453,7 +387,7 @@
   <!-- Drawer Panel -->
   <div id="impl-drawer">
     <span class="close-btn" id="impl-close">&times;</span>
-    <h2>LSO API Status Update</h2>
+    <h2>Implementation Registry</h2>
     <p class="drawer-sub">Tell us which LSO APIs and versions your company has implemented.</p>
 
     <div class="impl-field">
@@ -469,7 +403,8 @@
       <table class="impl-table" id="impl-table">
         <thead>
           <tr>
-            <th class="api-name">API / Product Version</th>
+            <th class="api-name">LSO API</th>
+            <th>Version</th>
             <th style="text-align:center">Buy Side</th>
             <th style="text-align:center">Sell Side</th>
           </tr>
@@ -487,7 +422,6 @@
     <div id="impl-msg"></div>
   </div>
 
-  <div id="info-box">This infographic shows the information that we have received from service providers and solution providers regarding their implementation of the most commonly deployed Mplify-standardized LSO APIs. The data is continuously being updated. For more information, please contact <a href="/cdn-cgi/l/email-protection#1d74737b725d706d71747b6433737869"><span class="__cf_email__" data-cfemail="10797e767f507d607c7976693e7e7564">[email&#160;protected]</span></a></div>
   <div id="debug-bar"></div>
   <svg id="graph"></svg>
   <div id="tooltip">
@@ -497,7 +431,7 @@
     <div class="tip-url"></div>
   </div>
 
-  <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+  <script>
   (async function() {
   /* ─────────────────────────────────────────────
      PASTE YOUR CSV DATA HERE
@@ -507,11 +441,10 @@
   // ── URL parameter support ──────────────────────────────────────────
   // Use ?nodes=GID&links=GID in the browser URL to switch data sources
   // Example: index.html?nodes=111111&links=222222
-  const BASE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQlTBuVO46kBAF0mRvNa949LeZT8KjqXdy1KnzkSGMmxp3eDLxO39NWqRyh4zaOOYHDdZoraia5gI7M/pub?single=true&output=csv";
-  const DEFAULT_NODES_GID = "234225689";
-  const DEFAULT_LINKS_GID = "1077047330";
+  const BASE_URL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vQBpMitJ2sH9Y6IIIrm8kd67ndx8E6gHXaM6c5SPvlzI7FE2baDQbYl692ucuTu6vkMHkjAZztKfWv3/pub?single=true&output=csv";
+  const DEFAULT_NODES_GID = "1365793813";
+  const DEFAULT_LINKS_GID = "1881293424";
   const CONFIG_URL = BASE_URL + "&gid=399938948";
-  const FORM_URL   = BASE_URL + "&gid=2067951233";
 
   // Fetch config tab and populate dropdown
   const apiSelect = document.getElementById("api-select");
@@ -521,22 +454,12 @@
     if (!configResp.ok) throw new Error("HTTP " + configResp.status);
     const configCsv = await configResp.text();
     apiConfig = d3.csvParse(configCsv).filter(r => r.label && r.nodes_gid && r.links_gid);
-    console.log("✅ apiConfig loaded from sheet:", apiConfig.length, "items", apiConfig);
     apiSelect.innerHTML = apiConfig.map(r =>
       `<option value="${r.nodes_gid}|${r.links_gid}">${r.label}</option>`
     ).join("");
   } catch(e) {
-    console.warn("⚠️ Config fetch failed, using fallback:", e);
-    // Fallback menu matching the simplified spreadsheet
-    apiConfig = [
-      { label: "Internet Access std139 v0.2.0",   nodes_gid: "234225689",  links_gid: "1077047330" },
-      { label: "Internet Access std139 v0.3.0",   nodes_gid: "1365793813", links_gid: "1881293424" },
-      { label: "Internet Access std139.1 v0.0.1", nodes_gid: "1066942469", links_gid: "554762381"  },
-      { label: "Internet Access std139.1 v1.00",  nodes_gid: "1445882970", links_gid: "863539780"  },
-    ];
-    apiSelect.innerHTML = apiConfig.map(r =>
-      `<option value="${r.nodes_gid}|${r.links_gid}">${r.label}</option>`
-    ).join("");
+    console.warn("Could not fetch API config:", e);
+    apiSelect.innerHTML = `<option value="${DEFAULT_NODES_GID}|${DEFAULT_LINKS_GID}">LSO Address Validation (lso.av.2)</option>`;
   }
 
   // Switch infographic when dropdown changes
@@ -1137,14 +1060,6 @@ hub-buy,hub-sell`;
     .delay((d, i) => 350 + i * 45)
     .style("opacity", 1);
 
-  // Hide loading overlay once graph is rendered
-  const maxDelay = 350 + nodes.length * 45 + 600;
-  setTimeout(() => {
-    const overlay = document.getElementById("loading-overlay");
-    overlay.classList.add("hidden");
-    setTimeout(() => overlay.style.display = "none", 650);
-  }, maxDelay);
-
   /* ─────────────────────────────────────────────
      TICK
   ───────────────────────────────────────────── */
@@ -1191,35 +1106,40 @@ hub-buy,hub-sell`;
   }
 
   // ── Implementation Survey ────────────────────────────────────────────────
-  (async function() {
+  (function() {
     // REPLACE THIS with your deployed Google Apps Script Web App URL
-    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbxG0hoPlzmHYha6Sdoqka8TZKvJhwTQuVYglEhLWa0QathRTTauIksKSRKHOZbLFOAN_w/exec";
+    const APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyk3_7fvEz4pRCbtbeWZExkkJ_FDhABY_URayVLsDN2g6Hb3SI3Xpp4IdGCY2_xwMHz/exec";
 
-    // Fetch form options independently from the form tab
+    // LSO API list with versions (from LSO Versions & Releases table)
+    const apis = [
+      { name: "Geographic Address",            versions: ["6.0.0-RC","7.0.0-RC","7.0.1"] },
+      { name: "Geographic Site",               versions: ["6.0.0-RC","7.0.0-RC","7.0.1"] },
+      { name: "Product Catalog",               versions: ["1.0.0-RC","2.0.0-RC","3.0.0-RC","4.0.1"] },
+      { name: "Product Offering Qualification",versions: ["6.0.0-RC","7.0.0-RC","7.0.1","8.0.0-RC","8.0.0"] },
+      { name: "Quote",                         versions: ["6.0.0-RC","7.0.0-RC","8.0.0","8.0.1","9.0.0-RC","10.0.0"] },
+      { name: "Product Offering Availability", versions: ["1.0.0-RC","2.0.0-RC","3.0.0-RC","4.0.0-RC","4.0.0"] },
+      { name: "Pricing Discovery",             versions: ["1.0.0-RC","2.0.0-RC","3.0.0-RC","4.0.0-RC","4.0.0"] },
+      { name: "Product Order",                 versions: ["6.0.0-RC","7.0.0-RC","8.0.0-RC","9.0.0-RC","10.0.0","11.0.0-RC","11.0.1"] },
+      { name: "Product Inventory",             versions: ["6.0.0-RC","7.0.0-RC","7.0.1","7.0.2","8.0.0-RC","8.0.0"] },
+      { name: "Trouble Ticket",                versions: ["1.0.0-RC","2.0.0-RC","3.0.0-RC","4.0.0","5.0.0-RC","5.0.0"] },
+      { name: "Appointment",                   versions: ["1.0.0-RC","2.0.0","3.0.0-RC","3.0.1"] },
+      { name: "Work Order",                    versions: ["1.0.0-RC","2.0.0","3.0.0-RC","3.0.0"] },
+      { name: "Billing",                       versions: ["1.0.0-RC","2.0.0","3.0.0-RC","3.0.1"] },
+      { name: "Circuit Impairment & Maintenance", versions: ["1.0.0-RC","1.0.0"] },
+    ];
+
+    // Build table rows
     const tbody = document.getElementById("impl-tbody");
-    let formOptions = [];
-    try {
-      console.log("Fetching form options from:", FORM_URL);
-      const formResp = await fetch(FORM_URL + "&t=" + Date.now());
-      console.log("Form fetch status:", formResp.status, formResp.ok);
-      if (!formResp.ok) throw new Error("HTTP " + formResp.status);
-      const formCsv = await formResp.text();
-      console.log("Form CSV:", formCsv.substring(0, 300));
-      formOptions = d3.csvParse(formCsv).filter(r => r.label).map(r => r.label);
-      console.log("Form options loaded:", formOptions.length, formOptions);
-    } catch(e) {
-      console.warn("Could not fetch form options:", e);
-      // Fallback — use apiConfig labels
-      formOptions = apiConfig.map(r => r.label);
-      console.log("Using fallback form options:", formOptions);
-    }
-    formOptions.forEach(label => {
-      const tr = document.createElement("tr");
-      tr.innerHTML = `
-        <td class="api-name" style="padding:8px">${label}</td>
-        <td class="ver-cell"><input type="checkbox" data-api="${label}" data-ver="${label}" data-side="buy" /></td>
-        <td class="ver-cell"><input type="checkbox" data-api="${label}" data-ver="${label}" data-side="sell" /></td>`;
-      tbody.appendChild(tr);
+    apis.forEach(api => {
+      api.versions.forEach((ver, i) => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td class="api-name">${i === 0 ? api.name : ""}</td>
+          <td>${ver}</td>
+          <td class="ver-cell"><input type="checkbox" data-api="${api.name}" data-ver="${ver}" data-side="buy" /></td>
+          <td class="ver-cell"><input type="checkbox" data-api="${api.name}" data-ver="${ver}" data-side="sell" /></td>`;
+        tbody.appendChild(tr);
+      });
     });
 
     // Drawer open/close
@@ -1257,16 +1177,14 @@ hub-buy,hub-sell`;
       submitBtn.disabled = true;
       msgEl.className = ""; msgEl.textContent = "Submitting…";
 
-      // Use image pixel trick — fires GET request bypassing CORS entirely
-      const payload = JSON.stringify({ company, email, comments, selections, timestamp: new Date().toISOString() });
-      const url = APPS_SCRIPT_URL + "?data=" + encodeURIComponent(payload);
-      await new Promise((resolve) => {
-        const img = new Image();
-        img.onload = img.onerror = () => resolve();
-        img.src = url;
-        // Fallback resolve after 5 seconds
-        setTimeout(resolve, 5000);
-      });
+      try {
+        const payload = JSON.stringify({ company, email, comments, selections, timestamp: new Date().toISOString() });
+        const url = APPS_SCRIPT_URL + "?data=" + encodeURIComponent(payload);
+        await fetch(url, { method: "GET", mode: "no-cors" });
+      } catch(e) {
+        // no-cors fetch errors are expected — request still reaches Apps Script
+        console.log("Fetch note:", e);
+      }
       // Show success regardless — no-cors prevents reading the response
       msgEl.className = "success";
       msgEl.textContent = "Thank you! Your implementation has been recorded.";
@@ -1281,4 +1199,11 @@ hub-buy,hub-sell`;
     const close = document.getElementById("lightbox-close");
     img.addEventListener("click",  () => lb.classList.add("active"));
     lb.addEventListener("click",   () => lb.classList.remove("active"));
-    close.addEventListener("click"
+    close.addEventListener("click", e => { e.stopPropagation(); lb.classList.remove("active"); });
+    document.addEventListener("keydown", e => { if (e.key === "Escape") lb.classList.remove("active"); });
+  })();
+
+  })(); // end async IIFE
+  </script>
+</body>
+</html>
